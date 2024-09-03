@@ -49,9 +49,20 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.entities.graphics": {
+      "version": "1.2.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.entities": "1.2.4",
+        "com.unity.render-pipelines.core": "14.0.9",
+        "com.unity.modules.particlesystem": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ext.nunit": {
       "version": "2.0.3",
-      "depth": 3,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -168,7 +179,7 @@
     },
     "com.unity.test-framework": {
       "version": "1.4.3",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "2.0.3",
