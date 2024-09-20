@@ -196,6 +196,54 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "CameraControls",
+            "id": "9624611b-25e5-4cb8-8276-6c5a96ef04e8",
+            "actions": [
+                {
+                    "name": "Rotation",
+                    "type": "Value",
+                    "id": "bae07419-08bc-4f5a-ae3b-59671d9eda78",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Zoom",
+                    "type": "Value",
+                    "id": "6a3998ef-70df-44e9-b27b-276ad1220eae",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f6382742-78fc-4674-963e-7541590b1846",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0415fc6c-1294-4cd7-936a-55d75de61ddb",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

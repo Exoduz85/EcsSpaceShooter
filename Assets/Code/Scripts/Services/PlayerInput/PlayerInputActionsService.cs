@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEngine.InputSystem;
-
-namespace Code.Scripts.Services.PlayerInput {
+﻿namespace Code.Scripts.Services.PlayerInput {
 	public class PlayerInputActionsService {
 		PlayerInputActions inputActions;
 		
@@ -19,11 +16,6 @@ namespace Code.Scripts.Services.PlayerInput {
 
 		public PlayerInputActions GetInputActions() {
 			return this.inputActions;
-		}
-
-		public bool TryGetAction(Guid guid, out InputAction inputAction) {
-			inputAction = this.inputActions.FindAction(guid.ToString());
-			return inputAction != null;
 		}
 	}
 }

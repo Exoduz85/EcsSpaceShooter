@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 
 namespace Code.Scripts.ComponentData.Input {
-	public struct ThrustInputData : IComponentData {
+	public struct RollInputData : IComponentData {
 		public float Value;
 	}
 }

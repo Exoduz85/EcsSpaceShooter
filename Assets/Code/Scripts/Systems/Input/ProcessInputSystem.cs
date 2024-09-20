@@ -4,7 +4,6 @@ using Code.Scripts.Services;
 using Code.Scripts.Services.PlayerInput;
 using Code.Scripts.Systems.Initialization.Early;
 using Unity.Entities;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Code.Scripts.Systems.Input {
@@ -36,10 +35,21 @@ namespace Code.Scripts.Systems.Input {
 			var playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
 			
 			if (playerEntity != Entity.Null) {
-				Debug.Log($"New thrust: {thrust}");
 				var thrustInputData = this.EntityManager.GetComponentData<ThrustInputData>(playerEntity);
-				thrustInputData.Thrust = thrust;
+				thrustInputData.Value = thrust;
 				this.EntityManager.SetComponentData(playerEntity, thrustInputData);
+
+				var pitchInputData = this.EntityManager.GetComponentData<PitchInputData>(playerEntity);
+				pitchInputData.Value = pitch;
+				this.EntityManager.SetComponentData(playerEntity, pitchInputData);
+
+				var yawInputData = this.EntityManager.GetComponentData<YawInputData>(playerEntity);
+				yawInputData.Value = yaw;
+				this.EntityManager.SetComponentData(playerEntity, yawInputData);
+
+				var rollInputData = this.EntityManager.GetComponentData<RollInputData>(playerEntity);
+				rollInputData.Value = roll;
+				this.EntityManager.SetComponentData(playerEntity, rollInputData);
 			}
 		}
 	}

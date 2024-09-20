@@ -218,6 +218,54 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""CameraControls"",
+            ""id"": ""9624611b-25e5-4cb8-8276-6c5a96ef04e8"",
+            ""actions"": [
+                {
+                    ""name"": ""Rotation"",
+                    ""type"": ""Value"",
+                    ""id"": ""bae07419-08bc-4f5a-ae3b-59671d9eda78"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""6a3998ef-70df-44e9-b27b-276ad1220eae"",
+                    ""expectedControlType"": ""Delta"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f6382742-78fc-4674-963e-7541590b1846"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0415fc6c-1294-4cd7-936a-55d75de61ddb"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": ""NormalizeVector2"",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -229,6 +277,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_ShipControls_Roll = m_ShipControls.FindAction("Roll", throwIfNotFound: true);
         m_ShipControls_Thrust = m_ShipControls.FindAction("Thrust", throwIfNotFound: true);
         m_ShipControls_Fire = m_ShipControls.FindAction("Fire", throwIfNotFound: true);
+        // CameraControls
+        m_CameraControls = asset.FindActionMap("CameraControls", throwIfNotFound: true);
+        m_CameraControls_Rotation = m_CameraControls.FindAction("Rotation", throwIfNotFound: true);
+        m_CameraControls_Zoom = m_CameraControls.FindAction("Zoom", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -364,6 +416,60 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public ShipControlsActions @ShipControls => new ShipControlsActions(this);
+
+    // CameraControls
+    private readonly InputActionMap m_CameraControls;
+    private List<ICameraControlsActions> m_CameraControlsActionsCallbackInterfaces = new List<ICameraControlsActions>();
+    private readonly InputAction m_CameraControls_Rotation;
+    private readonly InputAction m_CameraControls_Zoom;
+    public struct CameraControlsActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public CameraControlsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Rotation => m_Wrapper.m_CameraControls_Rotation;
+        public InputAction @Zoom => m_Wrapper.m_CameraControls_Zoom;
+        public InputActionMap Get() { return m_Wrapper.m_CameraControls; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CameraControlsActions set) { return set.Get(); }
+        public void AddCallbacks(ICameraControlsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CameraControlsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CameraControlsActionsCallbackInterfaces.Add(instance);
+            @Rotation.started += instance.OnRotation;
+            @Rotation.performed += instance.OnRotation;
+            @Rotation.canceled += instance.OnRotation;
+            @Zoom.started += instance.OnZoom;
+            @Zoom.performed += instance.OnZoom;
+            @Zoom.canceled += instance.OnZoom;
+        }
+
+        private void UnregisterCallbacks(ICameraControlsActions instance)
+        {
+            @Rotation.started -= instance.OnRotation;
+            @Rotation.performed -= instance.OnRotation;
+            @Rotation.canceled -= instance.OnRotation;
+            @Zoom.started -= instance.OnZoom;
+            @Zoom.performed -= instance.OnZoom;
+            @Zoom.canceled -= instance.OnZoom;
+        }
+
+        public void RemoveCallbacks(ICameraControlsActions instance)
+        {
+            if (m_Wrapper.m_CameraControlsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICameraControlsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CameraControlsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CameraControlsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CameraControlsActions @CameraControls => new CameraControlsActions(this);
     public interface IShipControlsActions
     {
         void OnPitch(InputAction.CallbackContext context);
@@ -371,5 +477,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnRoll(InputAction.CallbackContext context);
         void OnThrust(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+    }
+    public interface ICameraControlsActions
+    {
+        void OnRotation(InputAction.CallbackContext context);
+        void OnZoom(InputAction.CallbackContext context);
     }
 }

@@ -3,6 +3,6 @@ using Unity.Mathematics;
 
 namespace Code.Scripts.ComponentData.Input {
 	public struct RotationInputData : IComponentData {
-		public float3 Rotation;
+		public float3 Value;
 	}
 }
